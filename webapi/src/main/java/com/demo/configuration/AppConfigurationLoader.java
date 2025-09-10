@@ -1,17 +1,17 @@
 package com.demo.configuration;
 
 import com.demo.configuration.core.FileConfigLoader;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 
-@Configuration
+@Service
 public class AppConfigurationLoader {
 
-    @Autowired
-    private FileConfigLoader fileConfigLoader;
+    private final FileConfigLoader fileConfigLoader;
 
-    @Bean
+    public AppConfigurationLoader(FileConfigLoader fileConfigLoader) {
+        this.fileConfigLoader = fileConfigLoader;
+    }
+
     public AppConfig appConfigFromXml() {
         String[] fallbackPaths = {
             "https://config-server.example.com/appConfig.xml",
@@ -24,7 +24,6 @@ public class AppConfigurationLoader {
         );
     }
 
-    @Bean
     public AppConfig appConfigFromJson() {
         String[] fallbackPaths = {
             "https://config-server.example.com/appConfig.json",
@@ -37,7 +36,6 @@ public class AppConfigurationLoader {
         );
     }
 
-    @Bean
     public AppConfig appConfigFromYaml() {
         return fileConfigLoader.loadConfig("appConfig.yaml", "yaml", AppConfig.class)
                 .orElse(new AppConfig());

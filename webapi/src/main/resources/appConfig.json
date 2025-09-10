@@ -1,0 +1,23 @@
+{
+  "services": [
+    {
+      "name": "googleService",
+      "version": "1.0",
+      "endpoint": "https://api.users.com/v1",
+      "timeout": 5000
+    },
+    {
+      "name": "bankingService",
+      "version": "2.1",
+      "endpoint": "https://api.payments.com/v2",
+      "timeout": 3000
+    },
+    {
+      "name": "alertingService",
+      "version": "1.5",
+      "endpoint": "https://api.notifications.com/v1",
+      "timeout": 2000
+    }
+  ]
+}
+

@@ -1,6 +1,5 @@
 package com.demo.configuration.core;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -16,7 +15,6 @@ public class FileConfigLoader {
     private final List<ResourceLoader> resourceLoaders;
     private final Map<String, ConfigParser<Object>> configParsers;
 
-    @Autowired
     public FileConfigLoader(List<ResourceLoader> resourceLoaders, List<ConfigParser<Object>> configParsers) {
         this.resourceLoaders = resourceLoaders;
         this.configParsers = configParsers.stream()
