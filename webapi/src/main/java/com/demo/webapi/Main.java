@@ -14,7 +14,14 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 public class Main {
 
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        SpringApplication app = new SpringApplication(Main.class);
+        app.setBanner((environment, sourceClass, out) -> {
+            out.println("******************************************");
+            out.println("*      Welcome to the Web API App       *");
+            out.println("******************************************");
+        });
+        app.run(args);
+//        SpringApplication.run(Main.class, args);
     }
 
 }
