@@ -1,0 +1,63 @@
+# Maven build artifacts
+**/target/
+!webapi/target/webapi-0.0.1-SNAPSHOT.jar
+
+# Maven wrapper and settings
+.mvn/
+mvnw
+mvnw.cmd
+maven-wrapper.properties
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+*.md
+docs/
+
+# Docker files (to avoid recursion)
+Dockerfile*
+.dockerignore
+docker-compose*.yml
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Test coverage reports
+coverage/
+*.coverage
+
+# Environment files
+.env
+.env.local
+.env.*.local

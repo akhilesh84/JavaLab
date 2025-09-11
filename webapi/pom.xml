@@ -5,19 +5,25 @@
     <parent>
         <groupId>com.demo</groupId>
         <artifactId>demo-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>0.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>webapi</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>webapi</name>
     <description>webapi</description>
 
     <properties>
         <java.version>21</java.version>
     </properties>
+
     <dependencies>
+        <!-- Agent module dependency -->
+        <dependency>
+            <groupId>com.demo</groupId>
+            <artifactId>agent</artifactId>
+            <version>0.0.1</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-restclient</artifactId>
@@ -104,21 +110,21 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>3.1.0</version>
                 <executions>
-                    <execution>
-                        <id>copy-agent-jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <copy file="../agent/target/agent-1.0-SNAPSHOT.jar"
-                                      todir="target/"
-                                      failonerror="true"/>
-                                <echo message="Copied agent.jar to webapi/target directory"/>
-                            </target>
-                        </configuration>
-                    </execution>
+<!--                    <execution>-->
+<!--                        <id>copy-agent-jar</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>run</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <target>-->
+<!--                                <copy file="../agent/target/agent-1.0-SNAPSHOT.jar"-->
+<!--                                      todir="target/"-->
+<!--                                      failonerror="true"/>-->
+<!--                                <echo message="Copied agent.jar to webapi/target directory"/>-->
+<!--                            </target>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
                 </executions>
             </plugin>
         </plugins>
