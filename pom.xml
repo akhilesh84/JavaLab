@@ -23,6 +23,7 @@
     <modules>
         <module>agent</module>
         <module>webapi</module>
+        <module>playground</module>
     </modules>
 
     <dependencyManagement>
