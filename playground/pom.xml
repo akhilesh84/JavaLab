@@ -28,6 +28,11 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>4.1.0</version>
+        </dependency>
     </dependencies>
 
 </project>
