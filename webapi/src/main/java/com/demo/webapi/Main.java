@@ -3,6 +3,7 @@ package com.demo.webapi;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.kafka.annotation.EnableKafka;
 
 //By default, Spring Boot only scans for components (like @RestController, @ConfigurationProperties) in the same
 // package and sub-packages as the main application class. Since com.demo.controllers is not a sub-package of

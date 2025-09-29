@@ -2,12 +2,14 @@ package com.demo.generics;
 
 import java.util.ArrayList;
 import  java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.demo.contract.Concept;
 import com.demo.contract.Fixture;
+import lombok.Getter;
 
 @Concept
 public class GenericsConcepts {
@@ -91,6 +93,56 @@ public class GenericsConcepts {
         System.out.println("Number of elements divisible by 4: " + count);
     }
 
+    @Fixture(description = """
+            
+            """)
+    public void pecsPrinciple1()
+    {
+        List<Number> numbers = IntStream.rangeClosed(1, 10).boxed().collect(Collectors.toList());
+        List<Integer> integers = IntStream.rangeClosed(11, 20).boxed().toList();
+
+        copy(integers, numbers);
+        System.out.println("Numbers after copy: " + numbers);
+
+//        copy(numbers, integers); // This will cause a compile-time error
+//        reason: inference variable T has incompatible bounds
+//        upper bounds: java.lang.Integer,java.lang.Object
+//        lower bounds: java.lang.Number
+    }
+
+    @Fixture(description = """
+            Compilation by erasure means that at run time parameterized types are replaced by the corresponding raw
+            type: for example, the interfaces List<Integer>, List<String>, and List<List<String>> are all implemented
+            by a single interface, namely List.
+            
+            One consequence is that static members of a generic class are shared across all instantiations of that
+            class, including instantiations at different types. Static members of a class cannot refer to the type
+            parameter of a generic class, and when accessing a static member the class name should not be parameterized.
+            """)
+    public void staticMembersOfGenericClasses() {
+
+        class Cell<T> {
+            private final int id;
+            private final T value;
+            private final static AtomicInteger count = new AtomicInteger();
+            private static int nextId() { return count.getAndIncrement(); }
+            public Cell(T value) {
+                this.value = value;
+                id = nextId();
+            }
+            public T getValue() { return value; }
+            public int getId() { return id; }
+            public static int getCount() { return count.get(); }
+        }
+
+        Cell<String> a = new Cell<String>("one");
+        Cell<Integer> b = new Cell<Integer>(2);
+
+        System.out.println("Cell a: id=" + a.getId() + ", value=" + a.getValue());
+        System.out.println("Cell b: id=" + b.getId() + ", value=" + b.getValue());
+        System.out.println("Total Cell instances created: " + Cell.getCount());
+    }
+
     private <T> long countMatches(List<T> source, Predicate<T> predicate) {
 //        return source.stream().filter(predicate).count();
 
@@ -127,6 +179,10 @@ public class GenericsConcepts {
         for (Fruit fruit : source) {
             destination.add(fruit);
         }
+    }
+
+    private <T> void copy(List<? extends T> source, List<? super T> destination) {
+        destination.addAll(source);
     }
 
     private class Fruit {}

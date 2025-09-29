@@ -37,6 +37,14 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- Spring boot support for Kafka -->
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>3.3.10</version>
+                <scope>compile</scope>
+            </dependency>
+
             <!-- Lombok -->
             <dependency>
                 <groupId>org.projectlombok</groupId>

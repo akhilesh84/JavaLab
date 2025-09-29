@@ -16,13 +16,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Concept(description = "A demo for Kafka messaging integration")
 public class KafkaMessagingDemo {
-    private final KafkaProducer<String, String> producer;
-    private final KafkaConsumer<String, String> consumer;
+    private static final KafkaProducer<String, String> producer;
+    private static final KafkaConsumer<String, String> consumer;
 
-    // THis is used to synchronize teh consumer thread with the main thread on which the producer is running
-    private final AtomicBoolean running = new AtomicBoolean(true);
-
-    public KafkaMessagingDemo() {
+    static {
         Properties producerProps = new Properties();
         producerProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:30093");
         producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
@@ -40,9 +37,12 @@ public class KafkaMessagingDemo {
         consumer = new KafkaConsumer<>(consumerProps);
     }
 
+    // THis is used to synchronize teh consumer thread with the main thread on which the producer is running
+    private final AtomicBoolean running = new AtomicBoolean(true);
+
     @Fixture(description = "Send messages to a Kafka topic")
     public void SendMessageToTopic() {
-        consumer.subscribe(java.util.Collections.singletonList("myropic"));
+        consumer.subscribe(java.util.Collections.singletonList("mytopic"));
 
         var consumerThread = new Thread(() -> {
             try {
@@ -57,9 +57,6 @@ public class KafkaMessagingDemo {
                 System.out.println("Consumer is shutting down...");
             } catch (Exception e) {
                 System.err.println("Consumer error: " + e.getMessage());
-            } finally {
-                consumer.close();
-                System.out.println("Consumer closed");
             }
         });
 
@@ -74,14 +71,8 @@ public class KafkaMessagingDemo {
 
         // Send messages
         for (int i = 1; i <= 10; i++) {
-            producer.send(new ProducerRecord<>("myropic", "Hello world from " + i));
+            producer.send(new ProducerRecord<>("mytopic", "Hello world from " + i));
             System.out.println("Sent message: " + i);
-            try {
-                Thread.sleep(Duration.ofSeconds(1));
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-            }
         }
 
         // Graceful shutdown
@@ -94,7 +85,6 @@ public class KafkaMessagingDemo {
             Thread.currentThread().interrupt();
         }
 
-        producer.close();
         System.out.println("Demo completed");
     }
 }

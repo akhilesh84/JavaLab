@@ -71,6 +71,35 @@ public class ComparisonAndBounds {
 //                .forEach(System.out::println);
     }
 
+    @Fixture(description = """
+            This method demonstrates the concept of bridge methods in Java generics.
+            Bridge methods are compiler-generated methods that ensure polymorphism works correctly with generics.
+            They are not explicitly defined in the source code but are created by the Java compiler during the
+            compilation process.
+            """)
+    public void bridgeMethodsInGenerics() {
+        // Remember that in Java, generics are implemented using type erasure. This means that generic type information is
+        // not available at runtime. To maintain polymorphism and ensure that method overriding works correctly with
+        // generics, the Java compiler generates bridge methods.
+
+        // Bridge methods are compiler-generated methods that ensure polymorphism works correctly with generics.
+        // They are not explicitly defined in the source code but are created by the Java compiler during the
+        // compilation process.
+
+        var student = new Student("John Doe", 1, 85, 90, 80);
+
+        for (var method : student.getClass().getMethods())
+        {
+            if (method.isBridge()) {
+                System.out.println("Bridge method found: " + method);
+            }
+        }
+
+        // In the above code, we create an instance of the Student class and then use reflection to inspect its declared
+        // methods. We check each method to see if it is a bridge method using the isBridge() method. If a bridge method
+        // is found, we print its details to the console.
+    }
+
     @Getter
     class Student implements Comparable<Student> {
         private final String name;
