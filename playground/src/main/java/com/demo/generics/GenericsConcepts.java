@@ -1,6 +1,8 @@
 package com.demo.generics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import  java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -143,6 +145,36 @@ public class GenericsConcepts {
         System.out.println("Total Cell instances created: " + Cell.getCount());
     }
 
+    @Fixture(description = """
+            Principle of Truth in Advertising:
+            - This principle highlights the potential pitfalls of type erasure in Java generics.
+            - It demonstrates that even if a method signature suggests a certain type, the actual runtime type
+              may differ, leading to exceptions like ClassCastException.
+            - The Principle of Truth in Advertising in Java generics refers to the rule that “the reified type of an
+            array must be a subtype of the erasure of its static type.” This principle is about ensuring the runtime
+            type of an array (which is fully known and “reified”) aligns correctly with the compile-time type (the
+            static type’s erased form) to avoid type errors and class cast exceptions.
+              In simpler terms, when Java code advertises (i.e., declares) that it will return an array of a certain
+              type, the actual array created and returned at runtime must truly be of that type or its subtype. If the
+              runtime type of the array is not a subtype of the declared (erased) static type, Java will throw a
+              ClassCastException since arrays in Java carry runtime type information.
+            """)
+    public void PrincipleOfTruthInAdvertising()
+    {
+        List<String> strings = Arrays.asList("one", "two");
+        try {
+            String[] a = toArray(strings);  // ClassCastException here!
+        }
+        catch (ClassCastException e) {
+            System.out.println("Caught expected ClassCastException: " + e.getMessage());
+        }
+
+        System.out.println("Below is the output following the right technique. Check out the code in the fixture.");
+
+        String[] a = toArray(strings, new String[0]);
+        System.out.println(Arrays.toString(a));  // [one, two]
+    }
+
     private <T> long countMatches(List<T> source, Predicate<T> predicate) {
 //        return source.stream().filter(predicate).count();
 
@@ -163,6 +195,26 @@ public class GenericsConcepts {
             left++;
             right--;
         }
+    }
+
+    private static <T> T[] toArray(Collection<T> c) {
+        T[] a = (T[]) new Object[c.size()];  // unchecked cast
+        int i = 0;
+        for (T x : c)
+            a[i++] = x;
+        return a;
+    }
+
+    static <T> T[] toArray(Collection<T> c, T[] a) {
+        if (a.length < c.size()) a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), c.size());
+
+        int i = 0;
+
+        for (T x : c) a[i++] = x;
+
+        if (i < a.length) a[i] = null;
+
+        return a;
     }
 
     /*
