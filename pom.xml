@@ -22,8 +22,9 @@
 
     <modules>
         <module>agent</module>
-        <module>webapi</module>
+        <module>mylib</module>
         <module>playground</module>
+        <module>webapi</module>
     </modules>
 
     <dependencyManagement>
