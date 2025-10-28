@@ -4,6 +4,13 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.implementation.FixedValue;
+import net.bytebuddy.dynamic.ClassFileLocator;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.matcher.ElementMatchers;
+import net.bytebuddy.pool.TypePool;
+
 
 public class DummyAgent {
     public static void premain(String agentArgs, Instrumentation inst) {
@@ -15,13 +22,34 @@ public class DummyAgent {
                                     ProtectionDomain protectionDomain, byte[] classfileBuffer)
                     throws IllegalClassFormatException {
 
-                if (true /*className.contains("com/demo")*/) {
-                    String resourcePath = className.replace('.', '/') + ".class";
-                    if (loader != null) {
-                        java.net.URL url = loader.getResource(resourcePath);
-                        System.out.println("Loaded class: " + className + " from: " + url);
-                    } else {
-                        System.out.println("Loaded class: " + className + " from Bootstrap ClassLoader");
+                if ("com/demo/mylib/MyService".equals(className)) {
+                    System.out.println("=== Replacing MyService with Byte Buddy ===");
+
+                    try {
+                        String classNameDotted = className.replace('/', '.');
+
+                        // Create a composite locator that can find both your class and system classes
+                        ClassFileLocator classFileLocator = new ClassFileLocator.Compound(
+                                ClassFileLocator.ForClassLoader.ofSystemLoader(),
+                                ClassFileLocator.Simple.of(classNameDotted, classfileBuffer)
+                        );
+
+                        TypePool typePool = TypePool.Default.of(classFileLocator);
+                        TypeDescription typeDescription = typePool.describe(classNameDotted).resolve();
+
+                        byte[] modifiedBytes = new ByteBuddy()
+                                .redefine(typeDescription, classFileLocator)
+                                .method(ElementMatchers.named("performService"))
+                                .intercept(FixedValue.value("Service performed by Byte Buddy replacement!"))
+                                .make()
+                                .getBytes();
+
+                        System.out.println("Generated modified bytecode: " + modifiedBytes.length + " bytes");
+                        return modifiedBytes;
+
+                    } catch (Exception e) {
+                        System.err.println("Error creating replacement class: " + e.getMessage());
+                        e.printStackTrace();
                     }
                 }
 
