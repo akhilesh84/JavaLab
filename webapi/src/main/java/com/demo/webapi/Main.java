@@ -1,8 +1,12 @@
 package com.demo.webapi;
 
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+
+import java.util.Arrays;
+import java.util.logging.Logger;
 import org.springframework.kafka.annotation.EnableKafka;
 
 //By default, Spring Boot only scans for components (like @RestController, @ConfigurationProperties) in the same
@@ -15,6 +19,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 public class Main {
 
     public static void main(String[] args) {
+        final Logger Logger = java.util.logging.Logger.getLogger(Main.class.getName());
         SpringApplication app = new SpringApplication(Main.class);
         app.setBanner((environment, sourceClass, out) -> {
             out.println("******************************************");
@@ -42,11 +47,14 @@ public class Main {
         // before the application context is created.
 
         app.addListeners((event) -> {
-            System.out.println("Application event received: " + event.getClass().getName());
+            Logger.info("Application event received: " + event.getClass().getName());
         });
 
-        app.run(args);
+        var ctxt = app.run(args);
 //        SpringApplication.run(Main.class, args);
+
+        // Get the list of beans registered in application context
+        Arrays.stream(ctxt.getBeanDefinitionNames()).forEach(Logger::info);
     }
 
 }
