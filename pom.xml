@@ -18,6 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>4.0.0-M2</spring.boot.version>
         <lombok.version>1.18.30</lombok.version>
+        <spring-shell.version>3.4.1</spring-shell.version>
     </properties>
 
     <modules>
