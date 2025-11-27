@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'io.spring.dependency-management' version '1.1.7' apply false
+    id 'org.springframework.boot' version '4.0.0-M2' apply false
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+}
+
+group = 'com.demo'
+version = '0.0.1'
+
+subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://repo.spring.io/milestone'
+        }
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        options.compilerArgs << '-parameters'
+    }
+
+    tasks.withType(Test) {
+        useJUnitPlatform()
+    }
+}
+
+// Common dependency versions
+ext {
+    lombokVersion = '1.18.30'
+    springBootVersion = '4.0.0-M2'
+    springKafkaVersion = '3.3.10'
+    springShellVersion = '3.4.1'
+    byteBuddyVersion = '1.17.8'
+    asmVersion = '9.6'
+    reflectionsVersion = '0.10.2'
+    kafkaClientsVersion = '4.1.0'
+    slf4jVersion = '2.0.9'
+    jetbrainsAnnotationsVersion = '26.0.0'
+}
+

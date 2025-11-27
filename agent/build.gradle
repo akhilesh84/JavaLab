@@ -1,0 +1,34 @@
+plugins {
+    id 'java-library'
+    id 'com.github.johnrengelman.shadow'
+}
+
+dependencies {
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    implementation "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
+    implementation "org.ow2.asm:asm:${asmVersion}"
+}
+
+jar {
+    manifest {
+        attributes(
+            'Premain-Class': 'com.demo.agent.DummyAgent',
+            'Can-Redefine-Classes': 'true',
+            'Can-Retransform-Classes': 'true'
+        )
+    }
+}
+
+shadowJar {
+    archiveClassifier = ''
+    manifest {
+        attributes(
+            'Premain-Class': 'com.demo.agent.DummyAgent',
+            'Can-Redefine-Classes': 'true',
+            'Can-Retransform-Classes': 'true'
+        )
+    }
+}
+

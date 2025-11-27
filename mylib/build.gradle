@@ -1,0 +1,6 @@
+plugins {
+    id 'java-library'
+}
+
+// No additional dependencies currently configured in mylib
+

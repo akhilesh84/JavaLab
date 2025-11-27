@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+}
+
+dependencies {
+    implementation project(':agent')
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-restclient'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+    implementation "org.springframework.shell:spring-shell-starter:${springShellVersion}"
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
+    implementation "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    runtimeOnly 'com.h2database:h2'
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+bootJar {
+    mainClass = 'com.demo.Main'
+    archiveFileName = "${project.name}-${rootProject.version}.jar"
+    dependsOn ':agent:shadowJar'
+}
+
+// Task to copy agent jar alongside the boot jar for easy javaagent usage
+task copyAgentJar(type: Copy) {
+    group = 'build'
+    description = 'Copy agent jar to webapi build/libs directory'
+
+    from(project(':agent').tasks.named('shadowJar'))
+    into "${buildDir}/libs"
+    rename { 'agent-0.0.1.jar' }
+
+    dependsOn ':agent:shadowJar'
+    mustRunAfter ':agent:jar'
+}
+
+assemble.dependsOn copyAgentJar
+
+// Make test task depend on agent shadowJar to avoid implicit dependency issues
+tasks.named('test') {
+    dependsOn ':agent:shadowJar'
+}
+
+// Configure bootRun to use the agent
+bootRun {
+    def agentJar = project(':agent').tasks.shadowJar.outputs.files.singleFile
+    jvmArgs "-javaagent:${agentJar.absolutePath}"
+
+    dependsOn ':agent:shadowJar'
+}
+
