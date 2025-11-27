@@ -34,4 +34,21 @@ subprojects {
     }
 }
 
+tasks.register('dockerBuild', Exec) {
+    group = 'docker'
+    description = 'Builds Docker image for webapi project'
 
+    // Use full path to docker command
+    def dockerPath = ['/usr/local/bin/docker', '/opt/homebrew/bin/docker'].find { file(it).exists() } ?: 'docker'
+
+    commandLine dockerPath, 'build', '-t', 'javaapi:latest', '.'
+
+    doFirst {
+        println 'Building Docker image for webapi...'
+        println "Using Docker at: ${dockerPath}"
+    }
+
+    doLast {
+        println 'Docker image javaapi:latest built successfully'
+    }
+}

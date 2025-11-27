@@ -34,7 +34,7 @@ bootJar {
 }
 
 // Task to copy agent jar alongside the boot jar for easy javaagent usage
-task copyAgentJar(type: Copy) {
+tasks.register('copyAgentJar', Copy) {
     group = 'build'
     description = 'Copy agent jar to webapi build/libs directory'
 
