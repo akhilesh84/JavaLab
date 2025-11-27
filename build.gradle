@@ -34,17 +34,4 @@ subprojects {
     }
 }
 
-// Common dependency versions
-ext {
-    lombokVersion = '1.18.30'
-    springBootVersion = '4.0.0-M2'
-    springKafkaVersion = '3.3.10'
-    springShellVersion = '3.4.1'
-    byteBuddyVersion = '1.17.8'
-    asmVersion = '9.6'
-    reflectionsVersion = '0.10.2'
-    kafkaClientsVersion = '4.1.0'
-    slf4jVersion = '2.0.9'
-    jetbrainsAnnotationsVersion = '26.0.0'
-}
 
