@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "students")
@@ -37,61 +39,27 @@ public class Student {
 
     @Getter
     @Setter
-    private Integer grade;
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Grade> grades = new HashSet<>();
+
+    public void addGrade(Grade grade) {
+        grades.add(grade);
+        grade.setStudent(this);
+    }
+
+    public void removeGrade(Grade grade) {
+        grades.remove(grade);
+        grade.setStudent(null);
+    }
 
     public Student() { }
 
-    public Student(String firstName, String lastName, String email, LocalDate dateOfBirth, Integer grade) {
+    public Student(String firstName, String lastName, String email, LocalDate dateOfBirth) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
-        this.grade = grade;
     }
-
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public String getFirstName() {
-//        return firstName;
-//    }
-//
-//    public void setFirstName(String firstName) {
-//        this.firstName = firstName;
-//    }
-//
-//    public String getLastName() {
-//        return lastName;
-//    }
-//
-//    public void setLastName(String lastName) {
-//        this.lastName = lastName;
-//    }
-//
-//    public String getEmail() {
-//        return email;
-//    }
-//
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
-//
-//    public LocalDate getDateOfBirth() {
-//        return dateOfBirth;
-//    }
-//
-//    public void setDateOfBirth(LocalDate dateOfBirth) {
-//        this.dateOfBirth = dateOfBirth;
-//    }
-//
-//    public Integer getGrade() {
-//        return grade;
-//    }
-//
-//    public void setGrade(Integer grade) {
-//        this.grade = grade;
-//    }
 
     @Override
     public String toString() {
@@ -101,7 +69,6 @@ public class Student {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
-                ", grade=" + grade +
                 '}';
     }
 }
