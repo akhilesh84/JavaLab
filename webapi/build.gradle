@@ -14,7 +14,14 @@ dependencies {
     implementation "org.springframework.shell:spring-shell-starter:${springShellVersion}"
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
     implementation "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
-    implementation "io.micrometer:micrometer-registry-prometheus:${micrometerVersion}"
+
+    // Micrometer OTLP for metrics (auto-configured by Spring Boot)
+    implementation 'io.micrometer:micrometer-registry-otlp'
+    implementation 'org.springframework.boot:spring-boot-actuator-autoconfigure'
+
+    // Required for Spring Boot 4.x OpenTelemetry auto-configuration
+    implementation 'org.springframework.boot:spring-boot-opentelemetry'
+
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

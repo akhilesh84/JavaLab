@@ -1,6 +1,7 @@
 // java
 package com.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,11 +40,14 @@ public class Student {
 
     @Getter
     @Setter
+    @JsonIgnore
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Grade> grades = new HashSet<>();
 
     public void addGrade(Grade grade) {
         grades.add(grade);
+
+        // This is to enable bidirectional linkage from grade to student
         grade.setStudent(this);
     }
 
