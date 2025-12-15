@@ -4,8 +4,8 @@
 kubectl apply -f k8slab-ns.yaml
 
 # Deploy Kafka and kafka UI (Optional, not needed for WebAPI with OpenTelemetry)
-#kubectl apply -f kafka-deployment.yaml
-#kubectl apply -f kafka-ui.yaml
+kubectl apply -f kafka-deployment.yaml
+kubectl apply -f kafka-ui.yaml
 
 # Deploy WebAPI with OpenTelemetry
 kubectl apply -f webapi-configmap.yaml
@@ -21,8 +21,8 @@ kubectl apply -f grafana-deployment.yaml
 kubectl apply -f jaeger-deployment.yaml
 
 # Wait for deployments to be ready
-#kubectl wait --for=condition=available --timeout=300s deployment/kafka -n k8slab-ns
-#kubectl wait --for=condition=available --timeout=300s deployment/kafka-ui -n k8slab-ns
+kubectl wait --for=condition=available --timeout=300s deployment/kafka -n k8slab-ns
+kubectl wait --for=condition=available --timeout=300s deployment/kafka-ui -n k8slab-ns
 kubectl wait --for=condition=available --timeout=300s deployment/webapi -n k8slab-ns
 kubectl wait --for=condition=available --timeout=300s deployment/prometheus -n k8slab-ns
 kubectl wait --for=condition=available --timeout=300s deployment/grafana -n k8slab-ns
@@ -37,6 +37,9 @@ echo "  Prometheus: kubectl port-forward -n k8slab-ns service/prometheus-service
 echo "  OTEL Collector (OPTIONAL): kubectl port-forward -n k8slab-ns deployment/webapi 8889:8889"
 echo "  Grafana: kubectl port-forward -n k8slab-ns service/grafana-service 3000:3000"
 echo "  Jaeger UI: kubectl port-forward -n k8slab-ns service/jaeger-service 16686:16686"
+
+echo "  Kakfa: kubectl port-forward -n k8slab-ns ervice/kafka-external 9093:9093"
+echo "  Kafka UI: kubectl port-forward -n k8slab-ns service/kafka-ui 8085:8085"
 
 #kubectl port-forward -n k8slab-ns service/webapi-service 8080:8080
 #kubectl port-forward -n k8slab-ns service/prometheus-service 9090:9090
