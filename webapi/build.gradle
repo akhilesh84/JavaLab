@@ -19,6 +19,9 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-otlp'
     implementation 'org.springframework.boot:spring-boot-actuator-autoconfigure'
 
+    // For centralized logging
+    implementation 'com.github.loki4j:loki-logback-appender:1.5.1'
+
     // Required for Spring Boot 4.x OpenTelemetry auto-configuration
     implementation 'org.springframework.boot:spring-boot-opentelemetry'
 
