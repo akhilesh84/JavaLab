@@ -52,3 +52,27 @@ tasks.register('dockerBuild', Exec) {
         println 'Docker image javaapi:latest built successfully'
     }
 }
+
+tasks.register('k8sSetup', Exec) {
+    group = 'kubernetes'
+    description = 'Runs setup.sh to deploy all Kubernetes resources'
+
+    dependsOn(':dockerBuild')
+
+    workingDir file('k8s')
+    commandLine 'sh', 'setup.sh'
+
+    doFirst {
+        println 'Setting up Kubernetes resources...'
+
+        // Ensure setup.sh is executable
+        def setupScript = file('k8s/setup.sh')
+        if (!setupScript.canExecute()) {
+            setupScript.setExecutable(true)
+        }
+    }
+
+    doLast {
+        println 'Kubernetes setup complete!'
+    }
+}

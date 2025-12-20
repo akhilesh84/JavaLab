@@ -35,16 +35,17 @@ kubectl wait --for=condition=available --timeout=300s deployment/tempo -n k8slab
 echo "All deployments are ready!"
 echo ""
 echo "Access services:"
-echo "  Kafka UI: kubectl port-forward -n k8slab-ns service/kafka-ui-service 8080:8080"
+echo "  Kakfa: kubectl port-forward -n k8slab-ns service/kafka-external 9093:9093"
+echo "  Kafka UI: kubectl port-forward -n k8slab-ns service/kafka-ui-service 8095:8095"
+
 echo "  WebAPI: kubectl port-forward -n k8slab-ns service/webapi-service 8080:8080"
-echo "  Prometheus: kubectl port-forward -n k8slab-ns service/prometheus-service 9090:9090"
-echo "  Loki: kubectl port-forward -n k8slab-ns service/loki-service 3100:3100"
 echo "  OTEL Collector (OPTIONAL): kubectl port-forward -n k8slab-ns deployment/webapi 8889:8889"
+
+echo "  Prometheus: kubectl port-forward -n k8slab-ns service/prometheus-service 9090:9090"
+
+echo "  Loki: kubectl port-forward -n k8slab-ns service/loki-service 3100:3100"
+
 echo "  Grafana: kubectl port-forward -n k8slab-ns service/grafana-service 3000:3000"
-
-echo "  Kakfa: kubectl port-forward -n k8slab-ns ervice/kafka-external 9093:9093"
-echo "  Kafka UI: kubectl port-forward -n k8slab-ns service/kafka-ui 8085:8085"
-
 
 # In principle te below port-forwards is all that we need. Forwward the webapi port to be able to access the same from
 # host machine. And forward the grafana port to be able to access grafana dashboard from host machine.
